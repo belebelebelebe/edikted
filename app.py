@@ -6,7 +6,7 @@ import pandas as pd
 app = Flask(__name__)
 
 @app.route("/product/<string:category>")
-def index(category):
+def get_product_details(category):
     url = "https://edikted.com/collections/" + category
     html_content = soup(requests.get(url).content, "html")
     product_list = html_content.find_all("div", {"class": "product-card__title"})
@@ -35,6 +35,10 @@ def index(category):
 
     return render_template("product_detail.html",
     product_dict=product_dict, category=category)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run(debug = True)

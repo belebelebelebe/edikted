@@ -7,8 +7,18 @@ app = Flask(__name__)
 
 @app.route("/product/<string:category>")
 def get_product_details(category):
-    url = "https://edikted.com/collections/" + category
-    html_content = soup(requests.get(url).content, "html")
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept-Language": "en-HK,en;q=0.9,zh-HK;q=0.8",
+    }
+
+    cookies = {
+        "localization": "HK",
+        "cart_currency": "HKD",
+        "currency": "HKD",
+    }
+    url = "https://edikted.com/collections/" + category 
+    html_content = soup(requests.get(url, headers=headers, cookies=cookies).content, "html")
     product_list = html_content.find_all("div", {"class": "product-card__title"})
     product_photo_list = html_content.find_all("a", {"class": "product-card__image"})
     title_list = []
